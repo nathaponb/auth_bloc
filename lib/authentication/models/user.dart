@@ -13,7 +13,6 @@ class User extends Equatable {
   final String firstName;
   final String lastName;
 
-  // for instantiate an empty User instance
   static const empty = User(
     id: '-',
     username: '-',
