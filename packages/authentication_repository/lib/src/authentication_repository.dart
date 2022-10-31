@@ -1,13 +1,15 @@
 import 'dart:async';
 
-enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+import 'package:authentication_repository/authentication_repository.dart';
 
 class AuthenticationRepository {
-  final _controller = StreamController<AuthenticationStatus>();
+  final _controller = StreamController<Authentication>();
+  static const _username = 'nathapon';
+  static const _password = '12345dev';
 
-  Stream<AuthenticationStatus> get status async* {
+  Stream<Authentication> get status async* {
     await Future<void>.delayed(Duration(seconds: 1));
-    yield AuthenticationStatus.unauthenticated;
+    yield Authentication(status: AuthenticationStatus.unauthenticated);
     yield* _controller.stream;
   }
 
@@ -16,17 +18,27 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
+    if (username != _username && password != _password) {
+      _controller.add(
+        Authentication(status: AuthenticationStatus.unauthenticated),
+      );
+    }
     // delayed => Duration duration, FutureOr<void> Function()?
     await Future<void>.delayed(
       Duration(microseconds: 300),
       () => _controller.add(
-        AuthenticationStatus.authenticated,
+        Authentication(
+          status: AuthenticationStatus.authenticated,
+          username: username,
+        ),
       ),
     );
   }
 
   void logOut() {
-    _controller.add(AuthenticationStatus.unauthenticated);
+    _controller.add(Authentication(
+      status: AuthenticationStatus.unauthenticated,
+    ));
   }
 
   // release memory allocation in final stage.
