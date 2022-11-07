@@ -18,12 +18,13 @@ class AuthenticationBloc
         _userRepository = userRepository,
         super(const AuthenticationState.unknown()) {
     on<AuthenticationStatusChanged>(_onAuthenticationStatusChanged);
-    on<AuthenticationLogOutRequest>(_onAuthenticationLogOutRequest);
+    on<AuthenticationLogOutRequested>(_onAuthenticationLogOutRequested);
 
     // subscript to authentication stream and listen on its change
     // Stream<authentication> consists of 2 things status and username?
     // so we listen on it whenever it changed, we transfer it as an event of AuthenticationStatusChanged
     _authenticationSubscription = _authenticationRepository.status.listen(
+      // bloc add(event)
       (auth) => add(
         AuthenticationStatusChanged(
           auth.status,
@@ -58,8 +59,8 @@ class AuthenticationBloc
     }
   }
 
-  void _onAuthenticationLogOutRequest(
-    AuthenticationLogOutRequest event,
+  void _onAuthenticationLogOutRequested(
+    AuthenticationLogOutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
     _authenticationRepository.logOut();
