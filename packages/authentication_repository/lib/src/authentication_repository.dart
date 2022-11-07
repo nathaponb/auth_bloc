@@ -5,7 +5,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 class AuthenticationRepository {
   final _controller = StreamController<Authentication>();
   static const _username = 'nathapon';
-  static const _password = '12345dev';
+  static const _password = '12345';
 
   Stream<Authentication> get status async* {
     await Future<void>.delayed(Duration(seconds: 1));
@@ -18,10 +18,11 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
-    if (username != _username && password != _password) {
+    if (username != _username || password != _password) {
       _controller.add(
         Authentication(status: AuthenticationStatus.unauthenticated),
       );
+      return;
     }
     // delayed => Duration duration, FutureOr<void> Function()?
     await Future<void>.delayed(

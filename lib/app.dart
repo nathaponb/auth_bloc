@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 import 'package:auth_bloc/home/home.dart';
+import 'package:auth_bloc/login/login.dart';
 import 'package:auth_bloc/splash/splash.dart';
 
 class App extends StatelessWidget {
@@ -62,13 +63,13 @@ class _AppViewState extends State<AppView> {
                   (route) => false,
                 );
                 break;
-              // case AuthenticationStatus.unauthenticated:
-              //   // case unauthenticated
-              //   _navigator.pushAndRemoveUntil<void>(
-              //     LoginPage.route(),
-              //     (route) => false,
-              //   );
-              //   break;
+              case AuthenticationStatus.unauthenticated:
+                // case unauthenticated
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginScreen.route(),
+                  (route) => false,
+                );
+                break;
               case AuthenticationStatus.unknown:
                 // case unknown
                 break;
@@ -78,6 +79,7 @@ class _AppViewState extends State<AppView> {
         );
       },
       onGenerateRoute: (_) => SplashScreen.route(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
